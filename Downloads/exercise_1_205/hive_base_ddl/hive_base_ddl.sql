@@ -9,9 +9,14 @@ state string,
 zip_code string,
 county_name string,
 phone_number string,
-hospital_type string,
-hospital_ownership string,
-emergency_services string)
+condition string,
+measure_id string,
+measure_name string,
+score string,
+sample string,
+footnote string,
+measure_start_date string,
+measure_end_date string)
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
 WITH SERDEPROPERTIES (
 "separatorChar" = ",",

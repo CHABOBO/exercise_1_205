@@ -1,0 +1,6 @@
+surv_resp=sc.textFile("file:///data/surv_resp_nh.csv")
+print surv_resp.count()
+surv_resprecords= surv_resp.map(lambda r : r.split(","))
+surv_resprecords.first()
+surv_resprecords.count()
+surv_resprecords.saveAsTextFile("file:///data/surv_resprecords.py")

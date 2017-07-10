@@ -1,0 +1,24 @@
+Best State
+
+CREATE TABLE best_state AS SELECT readmit.state, AVG(surveyresp.hcahps_base_score) AS avgbase, AVG(surveyresp.hcahps_consistency_score) AS avgcons, AVG(surveyresp.hcahps_base_score+surveyresp.hcahps_consistency_score) AS avgtotal, COUNT(readmit.compared_to_national='Better than the National Rate') AS bb FROM readmit JOIN surveyresp ON readmit.provider_id=surveyresp.provider_id WHERE readmit.compared_to_national='Better than the National Rate' AND surveyresp.hcahps_base_score > 60 and surveyresp.hcahps_consistency_score > 15 GROUP BY readmit.state ORDER BY avgtotal DESC LIMIT 10;
+
+
+best_state.state	best_state.avgbase	best_state.avgcons	best_state.avgtotal	best_state.bb
+NE	                        79.0	         20.0	                  99.0	            1
+IN	                        77.0	         20.0	                  97.0	            1
+CA	                        77.0	         20.0	                  97.0	            3
+AR	                        77.0	         20.0	                  97.0	            1
+OK	               74.14285714285714	     20.0	                  94.14285714285714	7
+SD	                        73.0	         20.0	                  93.0	            2
+TX	                        72.75	         20.0	                  92.75	            4 
+OH	                        72.0	         20.0	                  92.0	            2
+NC	                        68.0	         20.0	                  88.0	            2
+AZ	                        65.0	         20.0	                  85.0	            4
+Time taken: 0.063 seconds, Fetched: 10 row(s)
+
+Again I qualify Best State by the readmit compared to national score, then the state's average of HCAHPS base and consistency scores. I have not taken into consideration the number of hospitals in each state, more nor have I taken into consideration the type of hospitals available in each state. In a follow up analysis it would be good to consider the count of how many were better than the national minus how many were lower than the national.
+
+
+
+
+

@@ -1,0 +1,45 @@
+hospital_patient
+
+CONCLUSION:
+WHY APPROACH APP AND HOW RESULTS SUPPORT APPROACH:
+
+FOR this query I wanted to show patients key elements about each facility that would be pertinent to an incoming patient. A patient should be able to search by condition, state, score of the hospital, hospital name and type to find viable hospitals and then use the remaining variables to compare current choices. This query assumes that with city and state the patient will be able to search for address via the web, the query also assumes that the patient will be interested in comparing hospitals by region and decide on what hospital to go to based off of survey feedback. The results show emergency departments in AK.
+
+CREATE TABLE hospital_pat AS SELECT
+e.condition, 
+e.state,
+e.city,
+e.score, 
+e.provider_id, 
+e.hospital_name,
+h.hospital_type, 
+h.hospital_ownership, 
+h.emergency_services, 
+r.compared_to_national, 
+AVG(r.score) AS rscore, 
+s.hcahps_base_score, 
+s.hcahps_consistency_score 
+FROM effcare AS e
+LEFT JOIN hospitals_nh AS h 
+ON e.provider_id=h.provider_id 
+LEFT JOIN readmit AS r 
+ON e.provider_id=r.provider_id 
+LEFT JOIN surveyresp AS s 
+ON e.provider_id=s.provider_id 
+WHERE e.score IN ('Very High (60,000+ patients annually)','High (40,000 - 59,999 patients annually)','Medium (20,000 - 39,999 patients annually)','Low (0 - 19,999 patients annually)') 
+GROUP BY e.condition, e.state, e.city, e.score, e.provider_id, e.hospital_name, h.hospital_type, h.hospital_ownership, h.emergency_services, r.compared_to_national, s.hcahps_base_score, s.hcahps_consistency_score
+LIMIT 10;
+
+
+hospital_pat.condition	hospital_pat.state	hospital_pat.city	hospital_pat.score	hospital_pat.provider_id	hospital_pat.hospital_name	hospital_pat.hospital_type	hospital_pat.hospital_ownership	hospital_pat.emergency_services	hospital_pat.compared_to_national	hospital_pat.rscore	hospital_pat.hcahps_base_score	hospital_pat.hcahps_consistency_score
+Emergency Department	AK	JUNEAU	Low (0 - 19,999 patients annually)	020008	BARTLETT REGIONAL HOSPITAL	Acute Care Hospitals	Government - Local	Yes	Number of Cases Too Small	NULL	29	18
+Emergency Department	AK	JUNEAU	Low (0 - 19,999 patients annually)	020008	BARTLETT REGIONAL HOSPITAL	Acute Care Hospitals	Government - Local	Yes	Not Available	NULL	29	18
+Emergency Department	AK	JUNEAU	Low (0 - 19,999 patients annually)	020008	BARTLETT REGIONAL HOSPITAL	Acute Care Hospitals	Government - Local	Yes	No different than the National Rate	13.719999999999999	29	18
+Emergency Department	AK	FAIRBANKS	Medium (20,000 - 39,999 patients annually)	020012	FAIRBANKS MEMORIAL HOSPITAL	Acute Care Hospitals	Voluntary non-profit - Other	Yes	Not Available	NULL	35	20
+Emergency Department	AK	FAIRBANKS	Medium (20,000 - 39,999 patients annually)	020012	FAIRBANKS MEMORIAL HOSPITAL	Acute Care Hospitals	Voluntary non-profit - Other	Yes	No different than the National Rate	14.308333333333332	35	20
+Emergency Department	AK	ANCHORAGE	Medium (20,000 - 39,999 patients annually)	020017	ALASKA REGIONAL HOSPITAL	Acute Care Hospitals	Proprietary	Yes	No different than the National Rate	13.55	7	16
+Emergency Department	AK	ANCHORAGE	High (40,000 - 59,999 patients annually)	020026	ALASKA NATIVE MEDICAL CENTER	Acute Care Hospitals	Government - Federal	Yes	Not Available	NULL	11	13
+Emergency Department	AK	ANCHORAGE	High (40,000 - 59,999 patients annually)	020026	ALASKA NATIVE MEDICAL CENTER	Acute Care Hospitals	Government - Federal	Yes	No different than the National Rate	14.616666666666665	11	13
+Emergency Department	AK	ANCHORAGE	High (40,000 - 59,999 patients annually)	020001	PROVIDENCE ALASKA MEDICAL CENTER	Acute Care Hospitals	Voluntary non-profit - Church	Yes	No different than the National Rate	12.607692307692306	13	19
+Emergency Department	AK	ANCHORAGE	High (40,000 - 59,999 patients annually)	020001	PROVIDENCE ALASKA MEDICAL CENTER	Acute Care Hospitals	Voluntary non-profit - Church	Yes	Better than the National Rate	12.9	13	19
+Time taken: 0.044 seconds, Fetched: 10 row(s)

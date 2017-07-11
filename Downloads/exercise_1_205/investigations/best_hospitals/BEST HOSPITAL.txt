@@ -1,5 +1,22 @@
 BEST HOSPITAL
 
+
+CONCLUSION:
+WHY APPROACH APP AND HOW RESULTS SUPPORT APPROACH:
+
+For Best Hospital the first qualifier is determined by if the hospital falls in 'Better than the National Rate' for readmission, HCAHPS Base Score 75% as the second qualifier, HCAHPS Consitency score 75% as the third qualifier for what, in this instance, I deem best. Something to make note of is that ALL qualifying hospitals are Acute Care Hospitals. This causes consideration when looking at the HCAHPS scores. Acute care centers treat acute health conditions, not chronic. This means that the results leave out patients and facilities that treat chronic health conditions. Additionally the majority of the sectors of the hospital that qualify have a Low patient count. When trying to control for this no hospital that is not an acute care hospital meets the qualifiers.
+
+***The Patient Experience of Care Domain Score is the sum of the HCAHPS Base Score (0 – 80 points) and HCAHPS Consistency Points score (0 – 20 points), thus ranges from 0 to 100 points, and comprises 30% of the Hospital VBP Total Performance Score.
+
+***Acute Care Hospital - short-term treatment for a severe injury or episode of illness, an urgent medical condition, or during recovery from surgery
+
+NOTE: hospitals that received very positive survey feedback, only problem-- these are small hospitals and without heavy flow may not receive as much feedback
+
+A better way to measure may be to take only effcare hospitals that are high or very high to medium in patients annually and then look at highest scorers of survey  and compared to national ranking. 
+
+BUT without further insight into how the ranking and scores were measured or created the current analysis of 10 best hospitals stands.
+
+
 CREATE TABLE best_hosp AS SELECT DISTINCT r.hospital_name, e.score, s.hcahps_base_score, s.hcahps_consistency_score, h.hospital_type, r.compared_to_national FROM readmit r LEFT JOIN surveyresp s ON r.provider_id= s.provider_id AND r.compared_to_national='Better than the National Rate' LEFT JOIN effcare e ON s.provider_id = e.provider_id AND e.score IN ('Very High (60,000+ patients annually)','High (40,000 - 59,999 patients annually)','Medium (20,000 - 39,999 patients annually)','Low (0 - 19,999 patients annually)') LEFT JOIN hospitals_nh h ON e.provider_id=h.provider_id WHERE s.hcahps_base_score > 60 AND s.hcahps_consistency_score > 15 AND s.hcahps_base_score IS NOT NULL AND s.hcahps_consistency_score IS NOT NULL AND e.score IS NOT NULL ORDER BY s.hcahps_base_score DESC, s.hcahps_consistency_score DESC, e.score DESC LIMIT 10;
 
 
@@ -15,18 +32,6 @@ FIRSTHEALTH MOORE REGIONAL HOSPITAL	       Very High (60,000+ patients annually)
 OKLAHOMA SURGICAL HOSPITAL, LLC	           Low (0 - 19,999 patients annually)	       67	               20	             Acute Care Hospitals	Better than the National Rate
 MAYO CLINIC HOSPITAL	                   Medium (20,000 - 39,999 patients annually)  65	               20	             Acute Care Hospitals   Better than the National Rate
 Time taken: 63.135 seconds, Fetched: 10 row(s)
-
-For Best Hospital the first qualifier is determined by if the hospital falls in 'Better than the National Rate' for readmission, HCAHPS Base Score as the second qualifier, HCAHPS as the third qualifier for what, in this instance, I deem best. Something to make note of is that ALL qualifying hospitals are Acute Care Hospitals. This causes consideration when looking at the HCAHPS scores. Acute care centers treat acute health conditions, not chronic. This means that the results leave out patients and facilities that treat chronic health conditions. Additionally the majority of the sectors of the hospital that qualify have a Low patient count. When trying to control for this no hospital that is not an acute care hospital meets the qualifiers.
-
-***The Patient Experience of Care Domain Score is the sum of the HCAHPS Base Score (0 – 80 points) and HCAHPS Consistency Points score (0 – 20 points), thus ranges from 0 to 100 points, and comprises 30% of the Hospital VBP Total Performance Score.
-
-***Acute Care Hospital - short-term treatment for a severe injury or episode of illness, an urgent medical condition, or during recovery from surgery
-
-NOTE: hospitals that received very positive survey feedback, only problem-- these are small hospitals and without heavy flow may not receive as much feedback
-
-A better way to measure may be to take only effcare hospitals that are high or very high to medium in patients annually and then look at highest scorers of survey  and compared to national ranking. 
-
-BUT without further insight into how the ranking and scores were measured or created the current analysis of 10 best hospitals stands.
 
 
 

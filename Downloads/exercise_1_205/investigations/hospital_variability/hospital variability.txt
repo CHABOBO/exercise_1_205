@@ -1,0 +1,20 @@
+hospital variability
+
+CONCLUSION:
+WHY APPROACH APP AND HOW RESULTS SUPPORT APPROACH:
+For this query I aimed to show the variability in results for hospitals and amongst hospitals. Hospitals can have varying survey hcahps scores, but for the purpose of reviewing discrepent rankings I AVG the scores to show variability amongst hospitals and focused on readmission scoring. A hospital can be both worse and no different compared to national and have varying average readmission scores. Additional review of the data can show more variability, but for the purpose of the assignment we leave it to 10.
+
+CREATE TABLE AS SELECT AVG(surveyresp.hcahps_base_score + surveyresp.hcahps_consistency_score) AS t, AVG(effcare.score) AS e, readmit.provider_id, readmit.hospital_name, readmit.state, readmit.compared_to_national, AVG(readmit.score) AS rs, hospitals_nh.hospital_type FROM readmit INNER JOIN hospitals_nh ON readmit.provider_id=hospitals_nh.provider_id INNER JOIN surveyresp ON readmit.provider_id=surveyresp.provider_id INNER JOIN effcare ON readmit.provider_id=effcare.provider_id WHERE readmit.score >= 0 AND readmit.compared_to_national IN ('Better than the National Rate', 'No different than the National Rate', 'Number of Cases Too Small', 'Worse than the National Rate') GROUP BY readmit.provider_id, readmit.hospital_name, readmit.state, readmit.compared_to_national, hospitals_nh.hospital_type LIMIT 10;
+
+t	    e	                readmit.provider_id	readmit.hospital_name	         readmit.state	readmit.compared_to_national	     rs	      hospitals_nh.hospital_type
+51.0	90.24324324324324	010012	            DEKALB REGIONAL MEDICAL CENTER	 AL	            No different than the National Rate	 15.32727272727275	        Acute Care Hospitals
+27.0	92.97297297297297	010011	            ST VINCENT'S EAST	             AL	            Worse than the National Rate	     13.89999999999999	         Acute Care Hospitals
+27.0	92.97297297297297	010011	            ST VINCENT'S EAST	             AL	            No different than the National Rate	 12.946153846153823	         Acute Care Hospitals
+45.0	71.58333333333333	010008	            CRENSHAW COMMUNITY HOSPITAL	     AL	            No different than the National Rate	 15.00000000000002	         Acute Care Hospitals
+57.0	86.84615384615384	010007	            MIZELL MEMORIAL HOSPITAL	     AL	            No different than the National Rate	 15.43333333333337	         Acute Care Hospitals
+21.0	88.89189189189189	010006	            ELIZA COFFEE MEMORIAL HOSPITAL	 AL          	Worse than the National Rate	     15.600000000000014	        Acute Care Hospitals
+21.0	88.89189189189189	010006	            ELIZA COFFEE MEMORIAL HOSPITAL	 AL          	No different than the National Rate	 13.838461538461557	        Acute Care Hospitals
+71.0	90.0	            010005	            MARSHALL MEDICAL CENTER SOUTH	 AL          	Worse than the National Rate	     15.099999999999994	        Acute Care Hospitals
+71.0	90.0	            010005	            MARSHALL MEDICAL CENTER SOUTH	 AL	            No different than the National Rate	 14.680000000000012	        Acute Care Hospitals
+33.0	92.1842105263158	010001	            SOUTHEAST ALABAMA MEDICAL CENTER AL	            No different than the National Rate	 13.692857142857141	           Acute Care Hospitals
+
